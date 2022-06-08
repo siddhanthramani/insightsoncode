@@ -41,4 +41,4 @@ fc.end_point( id = "4")
 fc.end_point( id = "1")
 
 # save the file to a csv at the end of the code
-fc.fastcode_csv("filename", timestamp = 'n')
+fc.fastcode_csv("filename", timestamp_required = 'n')

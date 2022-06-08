@@ -24,11 +24,10 @@ class InsightPoints(object):
 
         self.dict_fastcode = {}
         self.dict_fastcode[sc_in_fastcode.str_column_project_id] = project_id
-        return self.dict_fastcode
 
     def start_point(self, id,  **kwargs):
-        blank_keys = set(lc_in_fastcode.list_column_names) - set(kwargs.keys())
-        extra_keys = set(kwargs.keys()) - set(lc_in_fastcode.list_column_names)
+        blank_keys = set(lc_in_fastcode.list_user_column_names) - set(kwargs.keys())
+        extra_keys = set(kwargs.keys()) - set(lc_in_fastcode.list_user_column_names)
         if len(extra_keys) > 0:
             print("{} : {}".format(sc_in_fastcode.str_error_extra_keys, extra_keys))
         for key in blank_keys:
@@ -37,13 +36,12 @@ class InsightPoints(object):
         id = convert_type(id, dc_in_fastcode.dict_column_types[sc_in_fastcode.str_column_id])
         self.dict_fastcode[id] = kwargs
 
-        time_start = datetime.now(self.project_timezone_pytz)
-        self.dict_fastcode[id][sc_in_fastcode.str_column_start] = time_start
+        self.dict_fastcode[id][sc_in_fastcode.str_column_start] = datetime.now(self.project_timezone_pytz)
         return self.dict_fastcode
 
     def end_point(self, id = ""):
-        time_end = datetime.now(self.project_timezone_pytz)
-        self.dict_fastcode[id][sc_in_fastcode.str_column_end] = time_end
+        self.dict_fastcode[id][sc_in_fastcode.str_column_end] = datetime.now(self.project_timezone_pytz)
+
         try:
             self.dict_fastcode[id][sc_in_fastcode.str_column_time_taken] = self.dict_fastcode[id][sc_in_fastcode.str_column_end] - self.dict_fastcode[id][sc_in_fastcode.str_column_start]
         except:
@@ -52,7 +50,7 @@ class InsightPoints(object):
             self.dict_fastcode[id][sc_in_fastcode.str_column_time_taken] = dc_in_fastcode.dict_column_types_default[sc_in_fastcode.str_column_time_taken]
         return self.dict_fastcode
 
-    def fastcode_csv(self, filename, timestamp = 'y'):
+    def fastcode_csv(self, filename, timestamp_required = 'y'):
         project_id = self.dict_fastcode.pop(sc_in_fastcode.str_column_project_id)
         
         for key, val in self.dict_fastcode.items():
@@ -68,8 +66,8 @@ class InsightPoints(object):
         df_fastcode.index.name = sc_in_fastcode.str_column_id
         df_fastcode.reset_index()
         
-        if timestamp.lower() in lc_in_fastcode.list_yes:
-            timestamp += "_{}".format(datetime.now(self.project_timezone_pytz).strftime(sc_in_fastcode.str_date_time_format))
+        if timestamp_required.lower() in lc_in_fastcode.list_yes:
+            filename += "_{}".format(datetime.now(self.project_timezone_pytz).strftime(sc_in_fastcode.str_date_time_format))
         if filename.lower().endswith(".{}".format(sc_in_fastcode.str_csv)):
             df_fastcode.to_csv(filename)
         else:
