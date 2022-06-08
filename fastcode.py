@@ -1,6 +1,6 @@
 from datetime import datetime
 from h11 import Data
-from pytz import timezone   
+from pytz import timezone
 import pandas as pd
 import json
 
@@ -21,7 +21,7 @@ class InsightPoints(object):
         
         dc_in_fastcode.add_dict_column_types(dict_column_types)
         lc_in_fastcode.add_list_column_names(list(dict_column_types.keys()))
-        
+
         self.dict_fastcode = {}
         self.dict_fastcode[sc_in_fastcode.str_column_project_id] = project_id
         return self.dict_fastcode
@@ -52,7 +52,7 @@ class InsightPoints(object):
             self.dict_fastcode[id][sc_in_fastcode.str_column_time_taken] = dc_in_fastcode.dict_column_types_default[sc_in_fastcode.str_column_time_taken]
         return self.dict_fastcode
 
-    def fastcode_csv(self, filename, timestamp = 'n'):
+    def fastcode_csv(self, filename, timestamp = 'y'):
         project_id = self.dict_fastcode.pop(sc_in_fastcode.str_column_project_id)
         
         for key, val in self.dict_fastcode.items():
@@ -74,10 +74,6 @@ class InsightPoints(object):
             df_fastcode.to_csv(filename)
         else:
             df_fastcode.to_csv("{}.{}".format(filename, sc_in_fastcode.str_csv))
-
-    def log_fastcode(project_id, creds):
-        pass
-        # check into bq and log details
 
 
 class InsightsonCode(object):
