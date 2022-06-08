@@ -14,4 +14,5 @@ class StringConstants(object):
         self.str_date_time_format = "%Y-%m-%d_%H-%M-%S"
 
         self.str_error_end_without_start = "ERROR in code: END point called without START point"
-        self.str_error_extra_keys = "ERROR extra keys have been passed and removing them"
+        self.str_error_extra_keys = "ERROR in code: Extra keys have been passed and removing them"
+        self.str_error_incorrect_type = "ERROR in code: {} is not of the correct type"
