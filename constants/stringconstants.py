@@ -3,7 +3,6 @@ class StringConstants(object):
     def __init__(self):
         self.str_column_project_id = "project_id"
         self.str_column_id = "id"
-        self.str_column_tags = "tags"
         self.str_column_start = "start"
         self.str_column_end = "end"
         self.str_column_time_taken = "time_taken"
