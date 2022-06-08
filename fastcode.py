@@ -15,17 +15,20 @@ dc_in_fastcode = DictConstants()
 
 class InsightPoints(object):
     
-    def __init__(self, project_id, dict_constant = {"dict_column_types_default" : {"l1_tag" : str(), "l2_tag" : str(), "l3_tag" : str(), "l4_tag" : str(), "l5_tag" : str(), "tags" : list()}}, project_timezone = "UTC"):
+    def __init__(self, project_id, dict_column_types = {"l1_tag" : str, "l2_tag" : str, "l3_tag" : str, "l4_tag" : str, "l5_tag" : str, "tags" : list}, project_timezone = "UTC"):
         self.project_timezone = project_timezone
         self.project_timezone_pytz = timezone(self.project_timezone)
+        
+        dc_in_fastcode.add_dict_column_types(dict_column_types)
+        lc_in_fastcode.add_list_column_names(list(dict_column_types.keys()))
         
         self.dict_fastcode = {}
         self.dict_fastcode[sc_in_fastcode.str_column_project_id] = project_id
         return self.dict_fastcode
 
     def start_point(self, id,  **kwargs):
-        blank_keys = set(lc_in_fastcode.list_column) - set(kwargs.keys())
-        extra_keys = set(kwargs.keys()) - set(lc_in_fastcode.list_column)
+        blank_keys = set(lc_in_fastcode.list_column_names) - set(kwargs.keys())
+        extra_keys = set(kwargs.keys()) - set(lc_in_fastcode.list_column_names)
         if len(extra_keys) > 0:
             print("{} : {}".format(sc_in_fastcode.str_error_extra_keys, extra_keys))
         for key in blank_keys:
