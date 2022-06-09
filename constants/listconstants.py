@@ -17,7 +17,7 @@ class ListConstants(object):
             sc_in_lc.str_column_id]
 
         self.list_column_names = self.list_ioc_column_names.copy()
-    
+        
     def add_list_column_names(self, list_column_names : list):
         self.list_user_column_names = list_column_names
 

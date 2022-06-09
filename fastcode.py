@@ -21,18 +21,18 @@ class InsightPoints(object):
         
         dc_in_fastcode.add_dict_column_types(dict_column_types)
         lc_in_fastcode.add_list_column_names(list(dict_column_types.keys()))
-
+        
         self.dict_fastcode = {}
-        self.dict_fastcode[sc_in_fastcode.str_column_project_id] = project_id
+        self.dict_fastcode[sc_in_fastcode.str_column_project_id] = convert_type(project_id, dc_in_fastcode.dict_column_types[sc_in_fastcode.str_column_project_id])
 
     def start_point(self, id,  **kwargs):
         # get the list of extra keys to let user know we won't be using them
-        extra_keys = set(kwargs.keys()) - set(lc_in_fastcode.list_user_input_column_names)
+        extra_keys = set(kwargs.keys()) - set(lc_in_fastcode.list_user_column_names)
         if len(extra_keys) > 0:
             print("{} : {}".format(sc_in_fastcode.str_error_extra_keys, extra_keys))
         
         # get the list of blank keys to autofill with default values
-        blank_keys = set(lc_in_fastcode.list_user_input_column_names) - set(kwargs.keys())
+        blank_keys = set(lc_in_fastcode.list_user_column_names) - set(kwargs.keys())
         for key in blank_keys:
             kwargs[key] = dc_in_fastcode.dict_column_types_default[key]
         # id should be a string. So ensuring type is maintained by explicity converting id to string
