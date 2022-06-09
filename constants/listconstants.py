@@ -4,6 +4,8 @@ class ListConstants(object):
     
     def __init__(self):
         self.list_yes = ['y', 'yes']
+        self.list_open_points_errors_raise = ['r', 'raise']
+        self.list_open_points_errors_default = ['d', 'default']
         self.list_ioc_column_names = [
             sc_in_lc.str_column_project_id, 
             sc_in_lc.str_column_id, 
