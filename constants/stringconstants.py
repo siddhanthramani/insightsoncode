@@ -9,6 +9,7 @@ class StringConstants(object):
         self.str_column_cost = "cost"
 
         self.str_csv = "csv"
+        self.str_json = "json"
 
         self.str_date_time_format = "%Y-%m-%d_%H-%M-%S"
 
