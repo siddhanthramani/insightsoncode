@@ -52,6 +52,11 @@ class InsightPoints(object):
         time_end = datetime.now(self.project_timezone_pytz)
 
         # checking if startpoint was defined. if yes, do calc. if not, default values if errortype default, else throw error
+        self.error_handler_no_startpoint(id, time_end)
+
+        return self.dict_fastcode
+
+    def error_handler_no_startpoint(self, id, time_end):
         try:
             self.dict_fastcode[id][sc_in_fastcode.str_column_end] = time_end
             self.dict_fastcode[id][sc_in_fastcode.str_column_time_taken] = self.dict_fastcode[id][sc_in_fastcode.str_column_end] - self.dict_fastcode[id][sc_in_fastcode.str_column_start]
@@ -68,13 +73,29 @@ class InsightPoints(object):
                 print(sc_in_fastcode.str_error_wrong_open_points_errors)
                 raise e
 
-        return self.dict_fastcode
-
     def fastcode_csv(self, filename, timestamp_required = 'y'):
         # removing and storing project_id
         project_id = self.dict_fastcode.pop(sc_in_fastcode.str_column_project_id)
         
         # checking if endpoint was defined. if yes, do nothing. if not, default values if errortype default, else throw error
+        self.error_handler_no_endpoint_fastcode_csv()
+                    
+        # creating dfs, reseting id as column 
+        df_fastcode = pd.DataFrame(self.dict_fastcode).T
+        df_fastcode[sc_in_fastcode.str_column_project_id] = project_id
+        df_fastcode.index.name = sc_in_fastcode.str_column_id
+        df_fastcode.reset_index()
+        
+        # adding timesteamp if required
+        if timestamp_required.lower() in lc_in_fastcode.list_yes:
+            filename += "_{}".format(datetime.now(self.project_timezone_pytz).strftime(sc_in_fastcode.str_date_time_format))
+        
+        # adding .csv if required and saving fastcode as csv
+        if not filename.lower().endswith(".{}".format(sc_in_fastcode.str_csv)):
+            filename = "{}.{}".format(filename, sc_in_fastcode.str_csv)
+        df_fastcode.to_csv(filename)
+
+    def error_handler_no_endpoint_fastcode_csv(self):
         for key, val in self.dict_fastcode.items():
                 try:
                     if val[sc_in_fastcode.str_column_end]:
@@ -89,21 +110,6 @@ class InsightPoints(object):
                     else:
                         print(sc_in_fastcode.str_error_wrong_open_points_errors)
                         raise e
-                    
-        # creating dfs, reseting id as column
-        df_fastcode = pd.DataFrame(self.dict_fastcode).T
-        df_fastcode[sc_in_fastcode.str_column_project_id] = project_id
-        df_fastcode.index.name = sc_in_fastcode.str_column_id
-        df_fastcode.reset_index()
-        
-        # adding timesteamp if required
-        if timestamp_required.lower() in lc_in_fastcode.list_yes:
-            filename += "_{}".format(datetime.now(self.project_timezone_pytz).strftime(sc_in_fastcode.str_date_time_format))
-        
-        # adding .csv if required and saving fastcode as csv
-        if not filename.lower().endswith(".{}".format(sc_in_fastcode.str_csv)):
-            filename = "{}.{}".format(filename, sc_in_fastcode.str_csv)
-        df_fastcode.to_csv(filename)
 
 # this class is used to analyse our measured data and derive insights out of it
 class InsightsonCode(object):
