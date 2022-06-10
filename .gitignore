@@ -1,5 +1,6 @@
 # self created files
-/test.py
+/test_insightpoints.py
+/test_insightanalytics.py
 /pythontest.py
 # Byte-compiled / optimized / DLL files
 __pycache__/
