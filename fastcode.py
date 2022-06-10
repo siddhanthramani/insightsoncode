@@ -66,9 +66,15 @@ class InsightPoints(object):
                 raise e
             elif self.open_points_errors in lc_in_fastcode.list_open_points_errors_default:
                 self.dict_fastcode[id] = {}
-                self.dict_fastcode[id][sc_in_fastcode.str_column_end] = time_end
+                
+                # get the list of user column names to autofill with default values
+                blank_keys = set(lc_in_fastcode.list_user_column_names)
+                for key in blank_keys:
+                    self.dict_fastcode[id][key] = dc_in_fastcode.dict_column_types_default[key]
+                
                 self.dict_fastcode[id][sc_in_fastcode.str_column_start] = dc_in_fastcode.dict_column_types_default[sc_in_fastcode.str_column_start]
                 self.dict_fastcode[id][sc_in_fastcode.str_column_time_taken] = dc_in_fastcode.dict_column_types_default[sc_in_fastcode.str_column_time_taken]
+                self.dict_fastcode[id][sc_in_fastcode.str_column_end] = time_end
             else:
                 print(sc_in_fastcode.str_error_wrong_open_points_errors)
                 raise e
