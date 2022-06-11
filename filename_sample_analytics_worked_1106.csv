@@ -1,6 +1,0 @@
-,l1_tag,l2_tag,time_taken,time_taken,cost,cost
-,,,mean,sum,mean,sum
-0,bq,al,0.09,0.09,0.0,0.0
-1,bq,bl,0.08,0.08,0.0,0.0
-2,postgres,al,0.05,0.05,0.0,0.0
-3,postgres,bl,0.08,0.16,0.445,0.89
