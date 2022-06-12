@@ -1,5 +1,6 @@
 from constants.stringconstants import StringConstants
 sc_in_lc = StringConstants()
+
 class ListConstants(object):
     
     def __init__(self):
