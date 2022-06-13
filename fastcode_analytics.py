@@ -61,12 +61,12 @@ class InsightsonCode(object):
         return self.data
 
     def aggregate(self, level = [], filters = {}, time_span = [], cols_to_agg = [sc_in_fastcode_analytics.str_column_time_taken], aggs = ["avg"]):
-
+        self.agg_data = self.data.copy()
         for filter_key, filter_vals in filters.items():
             if isinstance(dc_in_fastcode_analytics.dict_column_types_default[filter_key], list):
-                self.data = self.data[list(map(lambda x : len(set(x).intersection(set(filter_vals))) > 0, self.data[filter_key]))]
+                self.agg_data = self.agg_data[list(map(lambda x : len(set(x).intersection(set(filter_vals))) > 0, self.agg_data[filter_key]))]
             else:
-                self.data = self.data[self.data[filter_key].isin(filter_vals)]
+                self.agg_data = self.agg_data[self.agg_data[filter_key].isin(filter_vals)]
 
         # changing avg to mean for aggregation
         if sc_in_fastcode_analytics.avg in aggs:
@@ -77,9 +77,6 @@ class InsightsonCode(object):
         agg_dict = dict()
         for col_to_agg in cols_to_agg:
             agg_dict[col_to_agg] = aggs
-        self.data = self.data.groupby(level).agg(agg_dict)
-        self.data = self.data.reset_index()
-        return self.data
-
-# include_cost("filename.csv", "cost.json")
-# aggregate("filename_sample.csv - Sheet2.csv", level = ["l1_tag", "l2_tag"], filters = {"l2_tag" : ["al", "bl"], "tags" : ["e", "d"]}, time_span = {}, cols_to_agg = [sc_in_fastcode_analytics.str_column_time_taken, sc_in_fastcode_analytics.str_column_cost], aggs = ["avg", "sum"])
+        self.agg_data = self.agg_data.groupby(level).agg(agg_dict)
+        self.agg_data = self.agg_data.reset_index()
+        return self.agg_data
