@@ -2,7 +2,8 @@
 /test_filename_sample.csv - Sheet2.csv
 /test_insightpoints.py
 /test_insightanalytics.py
-/pythontest.py
+/test_python.py
+/test_cost.json
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
