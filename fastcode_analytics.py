@@ -33,7 +33,7 @@ class InsightsonCode(object):
         
         self.data = data
 
-    def include_cost(self, jsonname):
+    def include_cost_columns(self, jsonname):
         # # adding .json if required and reading json into dataframe
         if not jsonname.lower().endswith(".{}".format(sc_in_fastcode_analytics.str_json)):
             jsonname = "{}.{}".format(jsonname, sc_in_fastcode_analytics.str_json)
@@ -43,6 +43,21 @@ class InsightsonCode(object):
 
         # mapping using id column and loading cost data to data
         self.data[sc_in_fastcode_analytics.str_column_cost] = list(map(lambda id : dict_id_cost_map.get(id, dc_in_fastcode_analytics.dict_column_types_default[sc_in_fastcode_analytics.str_column_cost]), self.data[sc_in_fastcode_analytics.str_column_id]))
+        return self.data
+
+    def include_groupby_datetime_columns(self, column_end : str = sc_in_fastcode_analytics.str_column_end, column_end_string_format : str = sc_in_fastcode_analytics.str_date_time_format, h = 1, d = 1, w = 1, m = 1, y =1):
+        temp_end_column = self.data[column_end].copy()
+        temp_end_column = pd.to_datetime(temp_end_column, format = column_end_string_format)
+        if y == 1:
+            self.data[sc_in_fastcode_analytics.str_column_hour] = temp_end_column.dt.to_period(sc_in_fastcode_analytics.str_to_period__frequency_year).map(str)
+        if m == 1:
+            self.data[sc_in_fastcode_analytics.str_column_hour] = temp_end_column.dt.to_period(sc_in_fastcode_analytics.str_to_period__frequency_month).map(str)
+        if w == 1:
+            self.data[sc_in_fastcode_analytics.str_column_hour] = temp_end_column.dt.to_period(sc_in_fastcode_analytics.str_to_period__frequency_week).map(str)
+        if d == 1:
+            self.data[sc_in_fastcode_analytics.str_column_hour] = temp_end_column.dt.to_period(sc_in_fastcode_analytics.str_to_period__frequency_day).map(str)
+        if h == 1:
+            self.data[sc_in_fastcode_analytics.str_column_hour] = temp_end_column.dt.to_period(sc_in_fastcode_analytics.str_to_period__frequency_hour).map(str)
         return self.data
 
     def aggregate(self, level = [], filters = {}, time_span = [], cols_to_agg = [sc_in_fastcode_analytics.str_column_time_taken], aggs = ["avg"]):

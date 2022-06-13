@@ -8,6 +8,19 @@ class StringConstants(object):
         self.str_column_time_taken = "time_taken"
         self.str_column_cost = "cost"
 
+        self.str_column_second = "second"
+        self.str_column_minute = "minute"
+        self.str_column_hour = "hour"
+        self.str_column_day = "day"
+        self.str_column_week = "week"
+        self.str_column_month = "month"
+
+        self.str_to_period__frequency_year = "Y"
+        self.str_to_period__frequency_month = "M"
+        self.str_to_period__frequency_week = "W"
+        self.str_to_period__frequency_day = "D"
+        self.str_to_period__frequency_hour = "H"
+
         self.str_csv = "csv"
         self.str_json = "json"
 
