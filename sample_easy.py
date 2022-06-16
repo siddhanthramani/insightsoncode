@@ -23,4 +23,4 @@ sleep(0.8)
 fc.end_point(id = "3")
 
 # save the file to a csv at the end of the code
-fc.fastcode_csv("filename")
+fc.to_dataframe("filename")

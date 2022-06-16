@@ -93,7 +93,18 @@ class InsightPoints(object):
         if not self.dict_fastcode[id][sc_in_fastcode.str_column_time_taken] == dc_in_fastcode.dict_column_types_default[sc_in_fastcode.str_column_time_taken]:
             self.dict_fastcode[id][sc_in_fastcode.str_column_time_taken] = self.dict_fastcode[id][sc_in_fastcode.str_column_time_taken].total_seconds()
 
-    def fastcode_csv(self, filename, timestamp_required = 'y'):
+    def to_csv(self, filename, timestamp_required = 'y'):
+        df_fastcode = self.to_dataframe()
+        # adding timesteamp if required
+        if timestamp_required.lower() in lc_in_fastcode.list_yes:
+            filename += "_{}".format(datetime.now(self.project_timezone_pytz).strftime(sc_in_fastcode.str_date_time_format))
+        
+        # adding .csv if required and saving fastcode as csv
+        if not filename.lower().endswith(".{}".format(sc_in_fastcode.str_csv)):
+            filename = "{}.{}".format(filename, sc_in_fastcode.str_csv)
+        df_fastcode.to_csv(filename)
+    
+    def to_dataframe(self):
         # removing and storing project_id
         project_id = self.dict_fastcode.pop(sc_in_fastcode.str_column_project_id)
         
@@ -105,15 +116,7 @@ class InsightPoints(object):
         df_fastcode[sc_in_fastcode.str_column_project_id] = project_id
         df_fastcode.index.name = sc_in_fastcode.str_column_id
         df_fastcode.reset_index()
-        
-        # adding timesteamp if required
-        if timestamp_required.lower() in lc_in_fastcode.list_yes:
-            filename += "_{}".format(datetime.now(self.project_timezone_pytz).strftime(sc_in_fastcode.str_date_time_format))
-        
-        # adding .csv if required and saving fastcode as csv
-        if not filename.lower().endswith(".{}".format(sc_in_fastcode.str_csv)):
-            filename = "{}.{}".format(filename, sc_in_fastcode.str_csv)
-        df_fastcode.to_csv(filename)
+        return df_fastcode
 
     def error_handler_no_endpoint_fastcode_csv(self):
         for key, val in self.dict_fastcode.items():
