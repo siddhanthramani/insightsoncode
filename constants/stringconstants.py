@@ -34,7 +34,8 @@ class StringConstants(object):
 
         self.str_note_unnecessary_input = "NOTE: Unnecessary input, ignoring it - {}"
 
-        self.str_error_wrong_open_points_errors = "ERROR in code : Wrong open_points_errors value"
+        self.str_error_wrong_open_points_errors = "ERROR in code: Wrong open_points_errors value"
         self.str_error_end_without_start = "ERROR in code: END point called without START point"
         self.str_error_incorrect_type = "ERROR in code: {} is not of the correct type"
         self.str_error_helper_pd_convert_type = "ERROR in code: Column list and column type list lengths are not matching"
+        self.str_error_incorrect_user_defined_column_type = "ERROR in code: Acceptable dict_column_types are {}"
