@@ -17,7 +17,7 @@ class InsightsonCode(object):
         self.filename = filename
         # adding .csv if required and reading csv into dataframe
         if not self.filename.lower().endswith(".{}".format(sc_in_fastcode_analytics.str_csv)):
-            self.filename = "{}.{}".format(self.filename, sc_in_fastcode_analytics.str_csv)
+            self.filename = sc_in_fastcode_analytics.str_filename_with_extension.format(self.filename, sc_in_fastcode_analytics.str_csv)
         data = pd.read_csv(self.filename)
         
         dc_in_fastcode_analytics.add_dict_column_types(dict_column_types)
@@ -36,7 +36,7 @@ class InsightsonCode(object):
     def include_cost_columns(self, jsonname):
         # # adding .json if required and reading json into dataframe
         if not jsonname.lower().endswith(".{}".format(sc_in_fastcode_analytics.str_json)):
-            jsonname = "{}.{}".format(jsonname, sc_in_fastcode_analytics.str_json)
+            jsonname = sc_in_fastcode_analytics.str_filename_with_extension.format(jsonname, sc_in_fastcode_analytics.str_json)
         with open(jsonname, 'r') as myfile:
             cost_data = myfile.read()
         dict_id_cost_map = json.loads(cost_data)
