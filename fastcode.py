@@ -14,10 +14,17 @@ dc_in_fastcode = DictConstants()
 class InsightPoints(object):
     
     def __init__(self, project_id : str, dict_column_types : dict = {"l1_tag" : str, "l2_tag" : str, "l3_tag" : str, "l4_tag" : str, "l5_tag" : str, "tags" : list}, project_timezone = "UTC", open_points_errors = "raise", **kwargs):
+        # convert time zone as required
         self.project_timezone = project_timezone
         self.project_timezone_pytz = timezone(self.project_timezone)
         
         self.open_points_errors = open_points_errors
+
+        # check if dict values are a string or list:
+        for user_input_column_type in dict_column_types.values():
+            if user_input_column_type not in lc_in_fastcode.list_acceptable_user_input_column_types:
+                print(sc_in_fastcode.str_error_incorrect_user_defined_column_type.format(lc_in_fastcode.list_acceptable_user_input_column_types))
+                raise TypeError
 
         dc_in_fastcode.add_dict_column_types(dict_column_types)
         lc_in_fastcode.add_list_column_names(list(dict_column_types.keys()))

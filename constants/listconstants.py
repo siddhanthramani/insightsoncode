@@ -5,6 +5,7 @@ class ListConstants(object):
     
     def __init__(self):
         self.list_yes = ['y', 'yes']
+        self.list_acceptable_user_input_column_types = [str, list]
         self.list_open_points_errors_raise = ['r', 'raise']
         self.list_open_points_errors_default = ['d', 'default']
         self.list_ioc_column_names = [

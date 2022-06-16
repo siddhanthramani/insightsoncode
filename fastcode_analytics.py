@@ -19,7 +19,7 @@ class InsightsonCode(object):
         if not self.filename.lower().endswith(".{}".format(sc_in_fastcode_analytics.str_csv)):
             self.filename = sc_in_fastcode_analytics.str_filename_with_extension.format(self.filename, sc_in_fastcode_analytics.str_csv)
         data = pd.read_csv(self.filename)
-        
+
         dc_in_fastcode_analytics.add_dict_column_types(dict_column_types)
         lc_in_fastcode_analytics.add_list_column_names(list(dict_column_types.keys()))
 
