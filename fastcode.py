@@ -13,7 +13,7 @@ dc_in_fastcode = DictConstants()
 # this class is used to introduce points where time should be measured and allows us to view the result as a csv or dictionary
 class InsightPoints(object):
     
-    def __init__(self, project_id : str, dict_column_types  : dict = {"l1_tag" : str, "l2_tag" : str, "l3_tag" : str, "l4_tag" : str, "l5_tag" : str, "tags" : list}, project_timezone = "UTC", open_points_errors = "raise"):
+    def __init__(self, project_id : str, dict_column_types : dict = {"l1_tag" : str, "l2_tag" : str, "l3_tag" : str, "l4_tag" : str, "l5_tag" : str, "tags" : list}, project_timezone = "UTC", open_points_errors = "raise", **kwargs):
         self.project_timezone = project_timezone
         self.project_timezone_pytz = timezone(self.project_timezone)
         
@@ -21,21 +21,30 @@ class InsightPoints(object):
 
         dc_in_fastcode.add_dict_column_types(dict_column_types)
         lc_in_fastcode.add_list_column_names(list(dict_column_types.keys()))
-        
+
         self.dict_fastcode = {}
         self.dict_fastcode[sc_in_fastcode.str_column_project_id] = convert_type(project_id, dc_in_fastcode.dict_column_types[sc_in_fastcode.str_column_project_id])
+        
+        list_constant_column_names = []
+        for str_user_constant_column_name, user_constant_column_value in kwargs.items():
+            if str_user_constant_column_name in lc_in_fastcode.list_user_column_names:
+                self.dict_fastcode[str_user_constant_column_name] = convert_type(user_constant_column_value, dc_in_fastcode.dict_column_types[str_user_constant_column_name])
+                list_constant_column_names.append(str_user_constant_column_name)
+            else:
+                print(sc_in_fastcode.str_note_unnecessary_input.format(str_user_constant_column_name))
+        lc_in_fastcode.add_list_constant_column_names(list_constant_column_names)
 
     def start_point(self, id : str,  **kwargs):
         # get the list of extra keys to let user know we won't be using them
-        extra_keys = set(kwargs.keys()) - set(lc_in_fastcode.list_user_column_names)
+        extra_keys = (set(kwargs.keys()) - set(lc_in_fastcode.list_user_column_names)) | (set(kwargs.keys()) & set(lc_in_fastcode.list_constant_column_names))
         if len(extra_keys) > 0:
-            print("{} : {}".format(sc_in_fastcode.str_error_extra_keys, extra_keys))
+            print(sc_in_fastcode.str_note_unnecessary_input.format(extra_keys))
             # removing extra keys
             for key in extra_keys:
                 kwargs.pop(key)
 
         # get the list of blank keys to autofill with default values
-        blank_keys = set(lc_in_fastcode.list_user_column_names) - set(kwargs.keys())
+        blank_keys = set(lc_in_fastcode.list_user_column_names) - (set(kwargs.keys()) | set(lc_in_fastcode.list_constant_column_names))
         for key in blank_keys:
             kwargs[key] = dc_in_fastcode.dict_column_types_default[key]
         
@@ -71,7 +80,7 @@ class InsightPoints(object):
                 self.dict_fastcode[id] = {}
                 
                 # get the list of user column names to autofill with default values
-                blank_keys = set(lc_in_fastcode.list_user_column_names)
+                blank_keys = set(lc_in_fastcode.list_user_column_names) - set(lc_in_fastcode.list_constant_column_names)
                 for key in blank_keys:
                     self.dict_fastcode[id][key] = dc_in_fastcode.dict_column_types_default[key]
                 
@@ -105,15 +114,23 @@ class InsightPoints(object):
         df_fastcode.to_csv(filename)
     
     def to_dataframe(self):
-        # removing and storing project_id
+        # removing and storing project_id, constant columns
         project_id = self.dict_fastcode.pop(sc_in_fastcode.str_column_project_id)
-        
+        dict_user_constant_column_names = {}
+        for str_user_constant_column_name in set(lc_in_fastcode.list_constant_column_names):
+            dict_user_constant_column_names[str_user_constant_column_name] = self.dict_fastcode.pop(str_user_constant_column_name)
+
         # checking if endpoint was defined. if yes, do nothing. if not, default values if errortype default, else throw error
         self.error_handler_no_endpoint_fastcode_csv()
                     
-        # creating dfs, reseting id as column 
+        # creating dfs
         df_fastcode = pd.DataFrame(self.dict_fastcode).T
+        # adding project id, constant columns
         df_fastcode[sc_in_fastcode.str_column_project_id] = project_id
+        for str_user_constant_column_name, user_constant_column_value in dict_user_constant_column_names.items():
+            df_fastcode[str_user_constant_column_name] = user_constant_column_value
+        
+        # reseting id as column 
         df_fastcode.index.name = sc_in_fastcode.str_column_id
         df_fastcode.reset_index()
         return df_fastcode

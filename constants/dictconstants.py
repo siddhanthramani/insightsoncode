@@ -33,6 +33,10 @@ class DictConstants(object):
         self.dict_column_types = self.dict_ioc_column_types.copy()
         self.dict_column_types_default = self.dict_ioc_column_types_default.copy()
 
+        # defining default if user does not input any values
+        self.dict_user_column_types = {}
+        self.dict_user_column_types_default = {}
+        
     def add_dict_column_types(self, dict_column_types : dict):
         self.dict_user_column_types = dict_column_types
         self.dict_user_column_types_default = dict(zip(dict_column_types.keys(), map(lambda const_type : const_type(), dict_column_types.values())))

@@ -21,8 +21,15 @@ class ListConstants(object):
 
         self.list_column_names = self.list_ioc_column_names.copy()
         
+        # defining default if user does not input any values
+        self.list_user_column_names = []
+        self.list_constant_column_names = []
+
     def add_list_column_names(self, list_column_names : list):
         self.list_user_column_names = list_column_names
 
         self.list_column_names += self.list_user_column_names
         self.list_user_input_column_names += self.list_user_column_names
+
+    def add_list_constant_column_names(self, list_constant_column_names : list):
+        self.list_constant_column_names = list_constant_column_names
