@@ -20,6 +20,12 @@ class InsightsonCode(object):
             self.filename = sc_in_fastcode_analytics.str_filename_with_extension.format(self.filename, sc_in_fastcode_analytics.str_csv)
         data = pd.read_csv(self.filename)
 
+        # check if dict values are a string or list:
+        for user_input_column_type in dict_column_types.values():
+            if user_input_column_type not in lc_in_fastcode_analytics.list_acceptable_user_input_column_types:
+                print(sc_in_fastcode_analytics.str_error_incorrect_user_defined_column_type.format(lc_in_fastcode_analytics.list_acceptable_user_input_column_types))
+                raise TypeError
+
         dc_in_fastcode_analytics.add_dict_column_types(dict_column_types)
         lc_in_fastcode_analytics.add_list_column_names(list(dict_column_types.keys()))
 
