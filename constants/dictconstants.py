@@ -1,33 +1,35 @@
 from constants.stringconstants import StringConstants
 from helpers.helpers import merge_two_dicts
-sc_in_dc = StringConstants()
+
 
 class DictConstants(object):
     def __init__(self):
+        self.sc_in_dc = StringConstants()
+
         self.dict_ioc_column_types = {
-            sc_in_dc.str_column_project_id : str,
-            sc_in_dc.str_column_id : str,
-            sc_in_dc.str_column_start : str,
-            sc_in_dc.str_column_end : str,
-            sc_in_dc.str_column_time_taken : float,
-            sc_in_dc.str_column_cost : float
+            self.sc_in_dc.str_column_project_id : str,
+            self.sc_in_dc.str_column_id : str,
+            self.sc_in_dc.str_column_start : str,
+            self.sc_in_dc.str_column_end : str,
+            self.sc_in_dc.str_column_time_taken : float,
+            self.sc_in_dc.str_column_cost : float
         }
         # self.dict_column_types_default = {"l1_tag" : str(), "l2_tag" : str(), "l3_tag" : str(), "l4_tag" : str(), "l5_tag" : str(), "tags" : list()}
         self.dict_ioc_column_types_default = {
-            sc_in_dc.str_column_project_id : str(),
-            sc_in_dc.str_column_id : str(),
-            sc_in_dc.str_column_start : str(),
-            sc_in_dc.str_column_end : str(),
-            sc_in_dc.str_column_time_taken : float(),
-            sc_in_dc.str_column_cost : float()
+            self.sc_in_dc.str_column_project_id : str(),
+            self.sc_in_dc.str_column_id : str(),
+            self.sc_in_dc.str_column_start : str(),
+            self.sc_in_dc.str_column_end : str(),
+            self.sc_in_dc.str_column_time_taken : float(),
+            self.sc_in_dc.str_column_cost : float()
         }
         self.dict_user_input_column_types = {
-            sc_in_dc.str_column_project_id : str
-            ,sc_in_dc.str_column_id : str}
+            self.sc_in_dc.str_column_project_id : str
+            ,self.sc_in_dc.str_column_id : str}
 
         self.dict_user_input_column_types_default = {
-            sc_in_dc.str_column_project_id : str()
-            ,sc_in_dc.str_column_id : str()
+            self.sc_in_dc.str_column_project_id : str()
+            ,self.sc_in_dc.str_column_id : str()
             }
 
         self.dict_column_types = self.dict_ioc_column_types.copy()
