@@ -1,10 +1,11 @@
 from constants.stringconstants import StringConstants
-sc_in_helpers = StringConstants()
 
 def convert_type(var, var_type):
     return var_type(var)
 
 def convert_type_pd_series(df, list_cols, list_col_types):
+    sc_in_helpers = StringConstants()
+    
     if len(list_cols) == len(list_col_types):
         for col_index in range(len(list_cols)):
             df[list_cols[col_index]] = df[list_cols[col_index]].astype(list_col_types[col_index])
