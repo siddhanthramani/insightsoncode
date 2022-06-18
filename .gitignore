@@ -4,6 +4,8 @@
 /test_insightanalytics.py
 /test_python.py
 /test_cost.json
+/test_cost_sample.json
+/test_fastcode_wrappers.py
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
