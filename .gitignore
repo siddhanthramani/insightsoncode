@@ -7,7 +7,7 @@
 /test_cost_sample.json
 /test_fastcode_wrappers.py
 /ideate_id.py
-
+/ideate_use.py
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
