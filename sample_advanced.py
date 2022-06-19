@@ -8,7 +8,7 @@ fc = ip(project_id = "1"
 
 # Create a startpoint for the entire code. Give it a unqiue ID and fill the required parameters. 
 # Only client and branch id parameters are filled to understand how the entire code performs.
-fc.start_point(id = "1",  client_id = "client1", branch_id= "dev", tags = ["notimp", "active"])
+fc.log_startpoint(id = "1",  client_id = "client1", branch_id= "dev", tags = ["notimp", "active"])
 
 # test random functions are defined for testing
 def random_function_1():
@@ -21,24 +21,24 @@ def random_api():
     sleep(0.1)
 
     # Create a startpoint for the random function. Give it a unqiue ID and fill the required parameters.
-    fc.start_point(id = "3",  client_id = "client1", branch_id= "dev", api_id = "1", function_id = "1")
+    fc.log_startpoint(id = "3",  client_id = "client1", branch_id= "dev", api_id = "1", function_id = "1")
     random_function_1()
     # Close the started point by calling endpoint with correct id
-    fc.end_point( id = "3")
+    fc.log_endpoint( id = "3")
 
 # Create a startpoint for the random function. Give it a unqiue ID and fill the required parameters.
-fc.start_point(id = "2",  client_id = "client1", branch_id= "dev", api_id = "1")
+fc.log_startpoint(id = "2",  client_id = "client1", branch_id= "dev", api_id = "1")
 random_api()
-fc.end_point( id = "2")
+fc.log_endpoint( id = "2")
 # Create a startpoint for the random function. Give it a unqiue ID and fill the required parameters.
 
-fc.start_point(id = "4",  client_id = "client1", branch_id= "dev", function_id = "2")
+fc.log_startpoint(id = "4",  client_id = "client1", branch_id= "dev", function_id = "2")
 random_function_2()
 # Close the started point by calling endpoint with correct id
-fc.end_point( id = "4")
+fc.log_endpoint( id = "4")
 
 # Close the first started point
-fc.end_point( id = "1")
+fc.log_endpoint( id = "1")
 
 # save the file to a csv at the end of the code
 fc.to_dataframe("filename", timestamp_required = 'n')
