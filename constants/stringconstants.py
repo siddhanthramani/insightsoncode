@@ -4,7 +4,7 @@ class StringConstants(object):
         self.str_column_project_id = "project_id"
         self.str_column_id = "id"
         self.str_column_start = "start"
-        self.str_column_end = "end"
+        self.str_column_stop = "stop"
         self.str_column_time_taken = "time_taken"
         self.str_column_cost = "cost"
 
@@ -39,3 +39,4 @@ class StringConstants(object):
         self.str_error_incorrect_type = "ERROR in code: {} is not of the correct type"
         self.str_error_helper_pd_convert_type = "ERROR in code: Column list and column type list lengths are not matching"
         self.str_error_incorrect_user_defined_column_type = "ERROR in code: Acceptable dict_column_types are {}"
+        self.str_error_log_send_startend_mismatch = "ERROR IN CODE : Insightpoints startpoint and endpoint mismatch"

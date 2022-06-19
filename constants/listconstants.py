@@ -12,7 +12,7 @@ class ListConstants(object):
             self.sc_in_lc.str_column_project_id, 
             self.sc_in_lc.str_column_id, 
             self.sc_in_lc.str_column_start, 
-            self.sc_in_lc.str_column_end, 
+            self.sc_in_lc.str_column_stop, 
             self.sc_in_lc.str_column_time_taken, 
             self.sc_in_lc.str_column_cost] 
         

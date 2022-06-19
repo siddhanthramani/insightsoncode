@@ -75,8 +75,8 @@ class InsightPoints(object):
 
     def error_handler_no_startpoint(self, id, time_end):
         try:
-            self.dict_fastcode[id][self.sc_in_fastcode.str_column_end] = time_end
-            self.dict_fastcode[id][self.sc_in_fastcode.str_column_time_taken] = self.dict_fastcode[id][self.sc_in_fastcode.str_column_end] - self.dict_fastcode[id][self.sc_in_fastcode.str_column_start]
+            self.dict_fastcode[id][self.sc_in_fastcode.str_column_stop] = time_end
+            self.dict_fastcode[id][self.sc_in_fastcode.str_column_time_taken] = self.dict_fastcode[id][self.sc_in_fastcode.str_column_stop] - self.dict_fastcode[id][self.sc_in_fastcode.str_column_start]
 
             # converting to required_type
             self.convert_start_end_timetaken(id)
@@ -95,7 +95,7 @@ class InsightPoints(object):
                 
                 self.dict_fastcode[id][self.sc_in_fastcode.str_column_start] = self.dc_in_fastcode.dict_column_types_default[self.sc_in_fastcode.str_column_start]
                 self.dict_fastcode[id][self.sc_in_fastcode.str_column_time_taken] = self.dc_in_fastcode.dict_column_types_default[self.sc_in_fastcode.str_column_time_taken]
-                self.dict_fastcode[id][self.sc_in_fastcode.str_column_end] = time_end
+                self.dict_fastcode[id][self.sc_in_fastcode.str_column_stop] = time_end
 
                 # converting to required_type
                 self.convert_start_end_timetaken(id)
@@ -106,8 +106,8 @@ class InsightPoints(object):
     def convert_start_end_timetaken(self, id):
         if not self.dict_fastcode[id][self.sc_in_fastcode.str_column_start] == self.dc_in_fastcode.dict_column_types_default[self.sc_in_fastcode.str_column_start]:
             self.dict_fastcode[id][self.sc_in_fastcode.str_column_start] = self.dict_fastcode[id][self.sc_in_fastcode.str_column_start].strftime(self.sc_in_fastcode.str_date_time_format)
-        if not self.dict_fastcode[id][self.sc_in_fastcode.str_column_end] == self.dc_in_fastcode.dict_column_types_default[self.sc_in_fastcode.str_column_end]:
-            self.dict_fastcode[id][self.sc_in_fastcode.str_column_end] = self.dict_fastcode[id][self.sc_in_fastcode.str_column_end].strftime(self.sc_in_fastcode.str_date_time_format)
+        if not self.dict_fastcode[id][self.sc_in_fastcode.str_column_stop] == self.dc_in_fastcode.dict_column_types_default[self.sc_in_fastcode.str_column_stop]:
+            self.dict_fastcode[id][self.sc_in_fastcode.str_column_stop] = self.dict_fastcode[id][self.sc_in_fastcode.str_column_stop].strftime(self.sc_in_fastcode.str_date_time_format)
         if not self.dict_fastcode[id][self.sc_in_fastcode.str_column_time_taken] == self.dc_in_fastcode.dict_column_types_default[self.sc_in_fastcode.str_column_time_taken]:
             self.dict_fastcode[id][self.sc_in_fastcode.str_column_time_taken] = self.dict_fastcode[id][self.sc_in_fastcode.str_column_time_taken].total_seconds()
 
@@ -147,14 +147,14 @@ class InsightPoints(object):
     def error_handler_no_endpoint_fastcode_csv(self):
         for key, val in self.dict_fastcode.items():
                 try:
-                    if val[self.sc_in_fastcode.str_column_end]:
+                    if val[self.sc_in_fastcode.str_column_stop]:
                         pass
                 except KeyError as e:
                     if self.open_points_errors in self.lc_in_fastcode.list_open_points_errors_raise:
                         print(self.sc_in_fastcode.str_error_end_without_start)
                         raise e
                     elif self.open_points_errors in self.lc_in_fastcode.list_open_points_errors_default:
-                        self.dict_fastcode[key][self.sc_in_fastcode.str_column_end] = self.dc_in_fastcode.dict_column_types_default[self.sc_in_fastcode.str_column_end]
+                        self.dict_fastcode[key][self.sc_in_fastcode.str_column_stop] = self.dc_in_fastcode.dict_column_types_default[self.sc_in_fastcode.str_column_stop]
                         self.dict_fastcode[key][self.sc_in_fastcode.str_column_time_taken] = self.dc_in_fastcode.dict_column_types_default[self.sc_in_fastcode.str_column_time_taken]
                         # converting to required_type
                         self.convert_start_end_timetaken(key)

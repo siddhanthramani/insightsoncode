@@ -51,7 +51,7 @@ class InsightsonCode(object):
         self.data[sc_in_fastcode_analytics.str_column_cost] = list(map(lambda id : dict_id_cost_map.get(id, dc_in_fastcode_analytics.dict_column_types_default[sc_in_fastcode_analytics.str_column_cost]), self.data[sc_in_fastcode_analytics.str_column_id]))
         return self.data
 
-    def include_groupby_datetime_columns(self, column_end : str = sc_in_fastcode_analytics.str_column_end, column_end_string_format : str = sc_in_fastcode_analytics.str_date_time_format, h = 1, d = 1, w = 1, m = 1, y =1):
+    def include_groupby_datetime_columns(self, column_end : str = sc_in_fastcode_analytics.str_column_stop, column_end_string_format : str = sc_in_fastcode_analytics.str_date_time_format, h = 1, d = 1, w = 1, m = 1, y =1):
         temp_end_column = self.data[column_end].copy()
         temp_end_column = pd.to_datetime(temp_end_column, format = column_end_string_format)
         if y == 1:
