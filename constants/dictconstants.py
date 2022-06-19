@@ -10,7 +10,7 @@ class DictConstants(object):
             self.sc_in_dc.str_column_project_id : str,
             self.sc_in_dc.str_column_id : str,
             self.sc_in_dc.str_column_start : str,
-            self.sc_in_dc.str_column_end : str,
+            self.sc_in_dc.str_column_stop : str,
             self.sc_in_dc.str_column_time_taken : float,
             self.sc_in_dc.str_column_cost : float
         }
@@ -19,7 +19,7 @@ class DictConstants(object):
             self.sc_in_dc.str_column_project_id : str(),
             self.sc_in_dc.str_column_id : str(),
             self.sc_in_dc.str_column_start : str(),
-            self.sc_in_dc.str_column_end : str(),
+            self.sc_in_dc.str_column_stop : str(),
             self.sc_in_dc.str_column_time_taken : float(),
             self.sc_in_dc.str_column_cost : float()
         }

@@ -10,17 +10,17 @@ fc = ip(project_id = "1"
 fc.log_startpoint(id = "1",  client_id = "1", code_id = "a")
 sleep(0.6)
 # close the startpoint by calling endpoint and having the same ID
-fc.log_endpoint(id = "1")
+fc.log_stoppoint(id = "1")
 
 # similar example
 fc.log_startpoint(id = "2",  client_id = "1", code_id = "a")
 sleep(0.7)
-fc.log_endpoint(id = "2")
+fc.log_stoppoint(id = "2")
 
 # similar example
 fc.log_startpoint(id = "3",  client_id = "1", code_id = "b")
 sleep(0.8)
-fc.log_endpoint(id = "3")
+fc.log_stoppoint(id = "3")
 
 # save the file to a csv at the end of the code
 fc.to_dataframe("filename")
