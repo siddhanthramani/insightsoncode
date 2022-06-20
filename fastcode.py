@@ -11,7 +11,7 @@ from helpers.stack_helpers import InsightPointAutoStack
 
 # this class is used to introduce points where time should be measured and allows us to view the result as a csv or dictionary
 class InsightPoints(object):
-    _IP_DICT_COLUMN_TYPES_DEFAULT = {"customer_id" : str, "product_id" : str, "node_id" : str, "branch_id" : str, "endpoint_id" : str, "code_id" : str}
+    _IP_DICT_COLUMN_TYPES_DEFAULT = {"customer_id" : str, "project_id" : str, "node_id" : str, "branch_id" : str, "endpoint_id" : str, "code_id" : str}
     
     def __init__(self, project_id : str, dict_column_types : dict = _IP_DICT_COLUMN_TYPES_DEFAULT, project_timezone = "UTC", open_points_errors = "raise", **kwargs):
         self.sc_in_fastcode = StringConstants()
@@ -177,79 +177,4 @@ class InsightPoints(object):
         for str_user_constant_column_name in set(self.lc_in_fastcode.list_constant_column_names):
             self.dict_fastcode[str_user_constant_column_name] = dict_fastcode_temp[str_user_constant_column_name]
 
-        HttpRequests().send_fastcode_results(api_key, self.dict_fastcode)
-
-
-class InsightPointsWrapper(InsightPoints):
-    _IP_DICT_COLUMN_TYPES_DEFAULT = {"customer_id" : str, "product_id" : str, "node_id" : str, "branch_id" : str, "endpoint_id" : str, "code_id" : str}
-    
-    def __init__(self, project_id : str, dict_column_types : dict = _IP_DICT_COLUMN_TYPES_DEFAULT, project_timezone : str = "UTC", **user_constant_columns : str):
-        self.sc_in_fastcode = StringConstants()
-        self.lc_in_fastcode = ListConstants()
-        self.dc_in_fastcode = DictConstants()
-        self.autostack = InsightPointAutoStack()
-        # convert time zone as required
-        self.project_timezone = project_timezone
-        self.project_timezone_pytz = timezone(self.project_timezone)
-
-        # check if dict values are a string or list:
-        for user_input_column_type in dict_column_types.values():
-            if user_input_column_type not in self.lc_in_fastcode.list_acceptable_user_input_column_types:
-                print(self.sc_in_fastcode.str_error_incorrect_user_defined_column_type.format(self.lc_in_fastcode.list_acceptable_user_input_column_types))
-                raise TypeError
-
-        # adding user inputted columns to dict defaults and list
-        self.dc_in_fastcode.add_dict_column_types(dict_column_types)
-        self.lc_in_fastcode.add_list_column_names(list(dict_column_types.keys()))
-
-        # creating main output dict
-        self.dict_fastcode = {}
-        self.dict_fastcode[self.sc_in_fastcode.str_column_project_id] = convert_type(project_id, self.dc_in_fastcode.dict_column_types[self.sc_in_fastcode.str_column_project_id])
-        
-        list_constant_column_names = []
-        for str_user_constant_column_name, user_constant_column_value in user_constant_columns.items():
-            if str_user_constant_column_name in self.lc_in_fastcode.list_user_column_names:
-                self.dict_fastcode[str_user_constant_column_name] = convert_type(user_constant_column_value, self.dc_in_fastcode.dict_column_types[str_user_constant_column_name])
-                list_constant_column_names.append(str_user_constant_column_name)
-            else:
-                print(self.sc_in_fastcode.str_note_unnecessary_input.format(str_user_constant_column_name))
-        self.lc_in_fastcode.add_list_constant_column_names(list_constant_column_names)
-
-    def log_startpoint(self, **kwargs):
-        # get the list of extra keys to let user know we won't be using them
-        extra_keys = (set(kwargs.keys()) - set(self.lc_in_fastcode.list_user_column_names)) | (set(kwargs.keys()) & set(self.lc_in_fastcode.list_constant_column_names))
-        if len(extra_keys) > 0:
-            print(self.sc_in_fastcode.str_note_unnecessary_input.format(extra_keys))
-            # removing extra keys
-            for key in extra_keys:
-                kwargs.pop(key)
-
-        # get the list of blank keys to autofill with default values
-        blank_keys = set(self.lc_in_fastcode.list_user_column_names) - (set(kwargs.keys()) | set(self.lc_in_fastcode.list_constant_column_names))
-        for key in blank_keys:
-            kwargs[key] = self.dc_in_fastcode.dict_column_types_default[key]
-        
-        # setting that start point's id value as user 
-        id = self.autostack.push()
-        self.dict_fastcode[id] = kwargs
-        # calculating start point time
-        self.dict_fastcode[id][self.sc_in_fastcode.str_column_start] = datetime.now(self.project_timezone_pytz)
-
-    def log_stoppoint(self):
-        # popping value of stack to set id
-        id = self.autostack.pop()
-        # calculating stop point time
-        self.dict_fastcode[id][self.sc_in_fastcode.str_column_stop] = datetime.now(self.project_timezone_pytz)
-        self.dict_fastcode[id][self.sc_in_fastcode.str_column_time_taken] = self.dict_fastcode[id][self.sc_in_fastcode.str_column_stop] - self.dict_fastcode[id][self.sc_in_fastcode.str_column_start]
-        self._convert_start_stop_timetaken(id)
-    
-    def _convert_start_stop_timetaken(self, id):
-        self.dict_fastcode[id][self.sc_in_fastcode.str_column_start] = self.dict_fastcode[id][self.sc_in_fastcode.str_column_start].strftime(self.sc_in_fastcode.str_date_time_format)
-        self.dict_fastcode[id][self.sc_in_fastcode.str_column_stop] = self.dict_fastcode[id][self.sc_in_fastcode.str_column_stop].strftime(self.sc_in_fastcode.str_date_time_format)
-        self.dict_fastcode[id][self.sc_in_fastcode.str_column_time_taken] = self.dict_fastcode[id][self.sc_in_fastcode.str_column_time_taken].total_seconds()
-
-    def log_send(self, api_key):
-        if self.autostack.pop():
-            print(self.sc_in_fastcode.str_error_log_send_startend_mismatch)
-            raise Exception
         HttpRequests().send_fastcode_results(api_key, self.dict_fastcode)
