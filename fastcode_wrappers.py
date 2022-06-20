@@ -25,18 +25,17 @@ def log_endpoint(api_key : str, project_timezone : str = "UTC", **log_ids):
         return decorator
     return decorator_main
 
-def log_codepoint(code_id : str = ''):
+def log_codepoint(code_id_outer : str = ''):
     def decorator_main(func):
-        def decorator(*args, **kwargs):
-            @wraps(func)
-            def wrapper(ipw, code_id_inner : str = ''):
-                code_id = code_id_inner or code_id
-                ipw.log_startpoint(code_id)
-                result = func(*args, **kwargs)
-                ipw.log_stoppoint()
-                return result
-            return wrapper
-        return decorator
+        @wraps(func)
+        def wrapper(ipw, code_id : str = '', *args, **kwargs):
+            code_id = code_id or code_id_outer
+            ipw.log_startpoint(code_id)
+            result = func(ipw, code_id, *args, **kwargs)
+            ipw.log_stoppoint()
+            return result
+        return wrapper
+    
         
     return decorator_main
 
