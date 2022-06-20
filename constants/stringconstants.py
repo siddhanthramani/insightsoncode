@@ -7,6 +7,9 @@ class StringConstants(object):
         self.str_column_stop = "stop"
         self.str_column_time_taken = "time_taken"
         self.str_column_cost = "cost"
+        
+        self.str_column_endpoint_id = "endpoint_id"
+        self.str_column_code_id = "code_id"
 
         self.str_column_second = "second"
         self.str_column_minute = "minute"
