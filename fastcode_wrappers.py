@@ -31,7 +31,7 @@ def log_codepoint(code_id_outer : str = ''):
         def wrapper(ipw, code_id : str = '', *args, **kwargs):
             code_id = code_id or code_id_outer
             ipw.log_startpoint(code_id)
-            result = func(ipw, code_id, *args, **kwargs)
+            result = func(ipw, *args, **kwargs)
             ipw.log_stoppoint()
             return result
         return wrapper
@@ -53,10 +53,11 @@ class InsightPointsWrapper(object):
     def _force_convert_log_ids_to_string(self, log_ids):
         log_ids = dict(zip(log_ids.keys(), list(map(str, log_ids.values()))))
         return log_ids
+
     def _check_if_required_ids_are_present(self, log_ids):
         for required_column in self.lc_in_fastcode.list_init_required_column_names:
             if not log_ids.get(required_column, 0):
-                print(self.sc_in_fastcode.str_error_required_columns_not_present)
+                print(self.sc_in_fastcode.str_error_required_columns_not_present.format(self.lc_in_fastcode.list_init_required_column_names))
                 raise Exception
         
     def _check_extra_and_blank_ids(self, log_ids):
@@ -85,6 +86,7 @@ class InsightPointsWrapper(object):
 
     def log_startpoint(self, code_id : str):
         if not code_id:
+            print(self.sc_in_fastcode.str_error_required_columns_not_present.format(self.sc_in_fastcode.str_column_code_id))
             raise Exception
         else:
             code_id = convert_type(code_id, self.dc_in_fastcode.dict_column_types[self.sc_in_fastcode.str_column_code_id])
