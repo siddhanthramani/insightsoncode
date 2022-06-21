@@ -40,6 +40,7 @@ class StringConstants(object):
         
 
         self.str_note_unnecessary_input = "NOTE: Unnecessary input, ignoring it - {}"
+        self.str_error_required_columns_not_present = "ERROR IN CODE : {} is/are required entry"
 
         self.str_error_wrong_open_points_errors = "ERROR in code: Wrong open_points_errors value"
         self.str_error_end_without_start = "ERROR in code: END point called without START point"
@@ -47,4 +48,4 @@ class StringConstants(object):
         self.str_error_helper_pd_convert_type = "ERROR in code: Column list and column type list lengths are not matching"
         self.str_error_incorrect_user_defined_column_type = "ERROR in code: Acceptable dict_column_types are {}"
         self.str_error_log_send_startend_mismatch = "ERROR IN CODE : Insightpoints startpoint and endpoint mismatch"
-        self.str_error_required_columns_not_present = "ERROR IN CODE : project_id and endpoint_id are required entry"
+        
