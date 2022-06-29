@@ -6,7 +6,7 @@ class StringConstants(object):
         self.str_column_start = "start"
         self.str_column_stop = "stop"
         self.str_column_time_taken = "time_taken"
-        self.str_column_cost = "cost"
+        self.str_column_code_cost = "cost"
         
         self.str_insights_on_code_prepend = "insights_on_code_"
         self.str_column_customer_id = "customer_id"
