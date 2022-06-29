@@ -16,7 +16,7 @@ class ListConstants(object):
             self.sc_in_lc.str_column_start, 
             self.sc_in_lc.str_column_stop, 
             self.sc_in_lc.str_column_time_taken, 
-            self.sc_in_lc.str_column_cost] 
+            self.sc_in_lc.str_column_code_cost] 
 
         self.list_init_column_names = [
             self.sc_in_lc.str_column_customer_id,

@@ -16,7 +16,7 @@ class DictConstants(object):
             self.sc_in_dc.str_column_start : str,
             self.sc_in_dc.str_column_stop : str,
             self.sc_in_dc.str_column_time_taken : float,
-            self.sc_in_dc.str_column_cost : float
+            self.sc_in_dc.str_column_code_cost : float
         }
         # self.dict_column_types_default = {"l1_tag" : str(), "l2_tag" : str(), "l3_tag" : str(), "l4_tag" : str(), "l5_tag" : str(), "tags" : list()}
         self.dict_column_types_default = {
@@ -31,7 +31,7 @@ class DictConstants(object):
             self.sc_in_dc.str_column_start : str(),
             self.sc_in_dc.str_column_stop : str(),
             self.sc_in_dc.str_column_time_taken : float(),
-            self.sc_in_dc.str_column_cost : float()
+            self.sc_in_dc.str_column_code_cost : float()
         }
 
         self.dict_insights_on_code_column_types = {
