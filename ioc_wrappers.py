@@ -116,7 +116,7 @@ class InsightPointsWrapper(object):
         self.dc_in_fastcode = DictConstants()
         self.autostack = InsightPointAutoStack()
 
-    def add_ids(self, **log_ids):
+    def add_logs(self, **log_ids):
         log_ids = self._check_extra_ids(log_ids)
         log_ids = self._force_convert_log_ids_to_string(log_ids)
         for log_id_name, log_id_value in log_ids.items():
