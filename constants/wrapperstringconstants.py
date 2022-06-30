@@ -33,6 +33,8 @@ class StringConstants(object):
         self.str_csv = "csv"
         self.str_json = "json"
         self.str_filename_with_extension = "{}.{}"
+        self.str_append_string = "_{}"
+        self.str_append_file_format = ".{}"
         
         self.avg = "avg"
         self.mean = "mean"

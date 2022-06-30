@@ -1,6 +1,8 @@
 from datetime import datetime
 from pytz import timezone
 from functools import wraps
+import pandas as pd
+import os.path
 
 from helpers.helpers import convert_type
 from constants.wrapperstringconstants import StringConstants
@@ -28,7 +30,7 @@ def _log_ids(ioc_ids : dict, log_ids, kwargs_log_ids):
     return log_ids, kwargs_log_ids
 
 
-def log_constantpoints(api_key : str, project_timezone : str = "UTC", log_send = 0, **log_ids):
+def log_constantpoints(api_key : str, csv_filename : str, mode : str = 'a', timestamp_required : str = 'n', project_timezone : str = "UTC", **log_ids):
     def log_endpoint(endpoint_id : str = ''):
         def decorator(func):
             @wraps(func)
@@ -41,10 +43,9 @@ def log_constantpoints(api_key : str, project_timezone : str = "UTC", log_send =
                 
                 ipw = InsightPointsWrapper(api_key, project_timezone, **appended_log_ids)
                 result = func(ipw, *args, **removed_kwargs)
-                if log_send == 1:
-                    ipw.log_send()
-                else:
-                    print(vars(ipw))
+                
+                ipw.to_csv(csv_filename, mode, timestamp_required)
+                
                 return result
             return wrapper
         return decorator
@@ -128,7 +129,7 @@ class InsightPointsWrapper(object):
             raise Exception
         else:
             code_id = convert_type(code_logs[self.sc_in_fastcode.str_column_code_id], self.dc_in_fastcode.dict_column_types[self.sc_in_fastcode.str_column_code_id])
-        # setting that start point's id value as user
+        # id is required to map startpoints and respective endpoint.
         id = self.autostack.push()
         self.dict_fastcode[id] = {}
         self.dict_fastcode[id][self.sc_in_fastcode.str_column_code_id] = code_id
@@ -147,6 +148,35 @@ class InsightPointsWrapper(object):
         self.dict_fastcode[id][self.sc_in_fastcode.str_column_start] = self.dict_fastcode[id][self.sc_in_fastcode.str_column_start].strftime(self.sc_in_fastcode.str_date_time_format)
         self.dict_fastcode[id][self.sc_in_fastcode.str_column_stop] = self.dict_fastcode[id][self.sc_in_fastcode.str_column_stop].strftime(self.sc_in_fastcode.str_date_time_format)
         self.dict_fastcode[id][self.sc_in_fastcode.str_column_time_taken] = self.dict_fastcode[id][self.sc_in_fastcode.str_column_time_taken].total_seconds()
+
+    def to_dataframe(self):
+        dict_user_constant_column_names = {}
+        for str_user_constant_column_name in set(self.lc_in_fastcode.list_init_column_names):
+            dict_user_constant_column_names[str_user_constant_column_name] = self.dict_fastcode.pop(str_user_constant_column_name)
+
+        # creating dfs
+        self.df_fastcode = pd.DataFrame(self.dict_fastcode).T
+       
+        for str_user_constant_column_name, user_constant_column_value in dict_user_constant_column_names.items():
+            self.df_fastcode[str_user_constant_column_name] = user_constant_column_value
+
+        return self.df_fastcode
+
+    def to_csv(self, csv_filename, mode = 'a', timestamp_required = 'n'):
+        self.to_dataframe()
+        # adding timesteamp if required
+        if timestamp_required.lower() in self.lc_in_fastcode.list_yes:
+            csv_filename += self.sc_in_fastcode.str_append_string.format(datetime.now(self.project_timezone_pytz).strftime(self.sc_in_fastcode.str_date_time_format))
+
+        # adding .csv if required and saving fastcode as csv
+        if not csv_filename.lower().endswith(self.sc_in_fastcode.str_append_file_format.format(self.sc_in_fastcode.str_csv)):
+            csv_filename = self.sc_in_fastcode.str_filename_with_extension.format(csv_filename, self.sc_in_fastcode.str_csv)
+        
+        # check if csv already exists to know whether or not to include header info
+        if os.path.isfile(csv_filename):     
+            self.df_fastcode.to_csv(csv_filename, mode = mode, header = False)
+        else:
+            self.df_fastcode.to_csv(csv_filename, mode = mode)
 
     def log_send(self):
         try: 
