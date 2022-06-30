@@ -1,4 +1,4 @@
-from constants.stringconstants import StringConstants
+from constants.wrapperstringconstants import StringConstants
 
 def convert_type(var, var_type):
     return var_type(var)
