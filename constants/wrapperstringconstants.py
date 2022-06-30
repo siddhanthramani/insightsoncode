@@ -8,7 +8,8 @@ class StringConstants(object):
         self.str_column_time_taken = "time_taken"
         self.str_column_code_cost = "cost"
         
-        self.str_insights_on_code_prepend = "insights_on_code_"
+        # ensure there is underscore at the end of code prepend
+        self.str_insights_on_code_prepend = "ioc_"
         self.str_column_customer_id = "customer_id"
         self.str_column_project_id = "project_id"
         self.str_column_node_id = "node_id"

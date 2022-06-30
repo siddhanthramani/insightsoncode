@@ -9,50 +9,61 @@ from constants.wrapperdictconstants import DictConstants
 from helpers.http_helpers import HttpRequests
 from helpers.stack_helpers import InsightPointAutoStack
 
-def _log_endpoint_ids(log_ids, kwargs_log_ids):
-    sc_in_log_endpoint_ids = StringConstants()
-    dc_in_log_endpoint_ids  = DictConstants()
+sc_in_fastcode_wrappers = StringConstants()
+
+def _log_ids(ioc_ids : dict, log_ids, kwargs_log_ids):
+    ioc_prepend = sc_in_fastcode_wrappers.str_insights_on_code_prepend
     to_remove_kwargs_log_ids_keys = []
+
     for kwargs_log_ids_key, kwargs_log_ids_value in kwargs_log_ids.items():
-        if dc_in_log_endpoint_ids.dict_insights_on_code_column_types.get(kwargs_log_ids_key, 0):
+        if ioc_ids.get(kwargs_log_ids_key, 0):
             to_remove_kwargs_log_ids_keys += [kwargs_log_ids_key]
             
-            kwargs_log_ids_key = kwargs_log_ids_key.split(sc_in_log_endpoint_ids.str_insights_on_code_prepend)[1]
+            kwargs_log_ids_key = kwargs_log_ids_key.split(ioc_prepend)[1]
             log_ids[kwargs_log_ids_key] = kwargs_log_ids_value
             
-    
     for key in to_remove_kwargs_log_ids_keys:
         kwargs_log_ids.pop(key)
     
     return log_ids, kwargs_log_ids
 
 
-def log_endpoint(api_key : str, project_timezone : str = "UTC", **log_ids):
-    def decorator_main(endpoint_id : str):
+def log_constantpoints(api_key : str, project_timezone : str = "UTC", log_send = 0, **log_ids):
+    def log_endpoint(endpoint_id : str = ''):
         def decorator(func):
             @wraps(func)
             def wrapper(*args, **kwargs):
-                sc_in_log_entrypoint = StringConstants()
-                appended_log_ids, removed_kwargs = _log_endpoint_ids(log_ids, kwargs)
-                appended_log_ids[sc_in_log_entrypoint.str_column_endpoint_id] = endpoint_id
+                sc_in_log_endpoint = StringConstants()
+                dc_in_log_endpoint = DictConstants()
+                
+                log_ids[sc_in_log_endpoint.str_column_endpoint_id] = endpoint_id
+                appended_log_ids, removed_kwargs = _log_ids(dc_in_log_endpoint.dict_endpoint_ids, log_ids, kwargs)
                 
                 ipw = InsightPointsWrapper(api_key, project_timezone, **appended_log_ids)
                 result = func(ipw, *args, **removed_kwargs)
-                # ipw.log_send()
-                print(vars(ipw))
+                if log_send == 1:
+                    ipw.log_send()
+                else:
+                    print(vars(ipw))
                 return result
             return wrapper
         return decorator
-    return decorator_main
+    return log_endpoint
 
-def log_codepoint(code_id_outer : str = '', code_cost_outer : float = 0.0):
+def log_codepoint(code_id : str = '', **code_logs):
     def decorator_main(func):
         @wraps(func)
-        def wrapper(ipw, code_id : str = '', code_cost : float = 0.0, *args, **kwargs):
-            code_id = code_id or code_id_outer
-            ipw.log_startpoint(code_id)
-            result = func(ipw, *args, **kwargs)
+        def wrapper(ipw, *args, **kwargs):
+            sc_in_log_codepoint = StringConstants()
+            dc_in_log_codepoint = DictConstants()
+            
+            code_logs[sc_in_log_codepoint.str_column_code_id] = code_id
+            appended_log_ids, removed_kwargs = _log_ids(dc_in_log_codepoint.dict_codepoint_ids, code_logs, kwargs)
+            
+            ipw.log_startpoint(**appended_log_ids)
+            result = func(ipw, *args, **removed_kwargs)
             ipw.log_stoppoint()
+            
             return result
         return wrapper
     return decorator_main
@@ -111,12 +122,12 @@ class InsightPointsWrapper(object):
         for log_id_name, log_id_value in log_ids.items():
             self.dict_fastcode[log_id_name] = log_id_value
     
-    def log_startpoint(self, code_id : str):
-        if not code_id:
+    def log_startpoint(self, **code_logs):
+        if not code_logs[self.sc_in_fastcode.str_column_code_id]:
             print(self.sc_in_fastcode.str_error_required_columns_not_present.format(self.sc_in_fastcode.str_column_code_id))
             raise Exception
         else:
-            code_id = convert_type(code_id, self.dc_in_fastcode.dict_column_types[self.sc_in_fastcode.str_column_code_id])
+            code_id = convert_type(code_logs[self.sc_in_fastcode.str_column_code_id], self.dc_in_fastcode.dict_column_types[self.sc_in_fastcode.str_column_code_id])
         # setting that start point's id value as user
         id = self.autostack.push()
         self.dict_fastcode[id] = {}
