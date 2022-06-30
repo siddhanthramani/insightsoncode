@@ -28,3 +28,5 @@ class ListConstants(object):
         self.list_init_required_column_names = [
             self.sc_in_lc.str_column_project_id,
             self.sc_in_lc.str_column_endpoint_id]
+
+        self.list_yes = ['y', 'yes']
