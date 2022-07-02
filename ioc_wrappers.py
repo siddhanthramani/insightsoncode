@@ -20,8 +20,8 @@ def _log_ids(ioc_ids : dict, log_ids, kwargs_log_ids):
     for kwargs_log_ids_key, kwargs_log_ids_value in kwargs_log_ids.items():
         if ioc_ids.get(kwargs_log_ids_key, 0):
             to_remove_kwargs_log_ids_keys += [kwargs_log_ids_key]
-            
-            kwargs_log_ids_key = kwargs_log_ids_key.split(ioc_prepend)[1]
+            if ioc_prepend:
+                kwargs_log_ids_key = kwargs_log_ids_key.split(ioc_prepend)[1]
             log_ids[kwargs_log_ids_key] = kwargs_log_ids_value
             
     for key in to_remove_kwargs_log_ids_keys:
