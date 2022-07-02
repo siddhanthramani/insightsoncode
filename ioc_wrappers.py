@@ -39,7 +39,7 @@ def log_constantpoints(api_key : str, csv_filename : str, mode : str = 'a', time
                 dc_in_log_endpoint = DictConstants()
                 
                 log_ids[sc_in_log_endpoint.str_column_endpoint_id] = endpoint_id
-                appended_log_ids, removed_kwargs = _log_ids(dc_in_log_endpoint.dict_endpoint_ids, log_ids, kwargs)
+                appended_log_ids, removed_kwargs = _log_ids(dc_in_log_endpoint.dict_init_ids, log_ids, kwargs)
                 
                 ipw = InsightPointsWrapper(api_key, project_timezone, **appended_log_ids)
                 result = func(ipw, *args, **removed_kwargs)
@@ -77,8 +77,8 @@ class InsightPointsWrapper(object):
         self._create_required_objects()
         self._change_timezone(project_timezone)
         self._check_if_required_ids_are_present(log_ids)
-        log_ids = self._check_extra_ids(log_ids)
-        log_ids = self._check_blank_ids(log_ids)
+        log_ids = self._check_extra_ids(log_ids, self.lc_in_fastcode.list_init_column_names)
+        log_ids = self._check_blank_ids(log_ids, self.lc_in_fastcode.list_init_column_names)
         self.dict_fastcode = self._force_convert_log_ids_to_string(log_ids)
     
     def _force_convert_log_ids_to_string(self, log_ids):
@@ -91,8 +91,8 @@ class InsightPointsWrapper(object):
                 print(self.sc_in_fastcode.str_error_required_columns_not_present.format(self.lc_in_fastcode.list_init_required_column_names))
                 raise Exception
         
-    def _check_extra_ids(self, log_ids):
-        extra_keys = set(log_ids.keys()) - set(self.lc_in_fastcode.list_init_column_names)
+    def _check_extra_ids(self, log_ids, required_logs_list):
+        extra_keys = set(log_ids.keys()) - set(required_logs_list)
         if len(extra_keys) > 0:
             print(self.sc_in_fastcode.str_note_unnecessary_input.format(extra_keys))
             # removing extra keys
@@ -100,9 +100,9 @@ class InsightPointsWrapper(object):
                 log_ids.pop(key)
         return log_ids
 
-    def _check_blank_ids(self, log_ids):
+    def _check_blank_ids(self, log_ids, required_logs_list):
         # get the list of blank keys to autofill with default values
-        blank_keys = set(self.lc_in_fastcode.list_init_column_names) - set(log_ids.keys())
+        blank_keys = set(required_logs_list) - set(log_ids.keys())
         for key in blank_keys:
             log_ids[key] = self.dc_in_fastcode.dict_column_types_default[key]
         return log_ids
@@ -117,11 +117,29 @@ class InsightPointsWrapper(object):
         self.dc_in_fastcode = DictConstants()
         self.autostack = InsightPointAutoStack()
 
-    def add_logs(self, **log_ids):
-        log_ids = self._check_extra_ids(log_ids)
-        log_ids = self._force_convert_log_ids_to_string(log_ids)
-        for log_id_name, log_id_value in log_ids.items():
-            self.dict_fastcode[log_id_name] = log_id_value
+    def add_constant_logs(self, **const_logs):
+        const_logs = self._check_extra_ids(const_logs, self.lc_in_fastcode.list_constant_column_names)
+        const_logs = self._force_convert_log_ids_to_string(const_logs)
+        for const_log_name, const_log_value in const_logs.items():
+            self.dict_fastcode[const_log_name] = const_log_value
+
+    def add_endpoint_logs(self, **endpoint_logs):
+        endpoint_logs = self._check_extra_ids(endpoint_logs, self.lc_in_fastcode.list_endpoint_column_names)
+        endpoint_logs = self._force_convert_log_ids_to_string(endpoint_logs)
+        for endpoint_log_name, endpoint_log_value in endpoint_logs.items():
+            self.dict_fastcode[endpoint_log_name] = endpoint_log_value
+
+    def add_code_logs(self, **code_logs):
+        code_logs = self._check_extra_ids(code_logs, self.lc_in_fastcode.list_code_column_names)
+        code_logs = self._force_convert_log_ids_to_string(code_logs)
+        for code_log_name, code_log_value in code_logs.items():
+            self.dict_fastcode[self.id][code_log_name] = code_log_value
+            
+    # def add_logs(self, **log_ids):
+    #     log_ids = self._check_extra_ids(log_ids, self.lc_in_fastcode.list_init_column_names)
+    #     log_ids = self._force_convert_log_ids_to_string(log_ids)
+    #     for log_id_name, log_id_value in log_ids.items():
+    #         self.dict_fastcode[log_id_name] = log_id_value
     
     def log_startpoint(self, **code_logs):
         if not code_logs[self.sc_in_fastcode.str_column_code_id]:
@@ -131,6 +149,7 @@ class InsightPointsWrapper(object):
             code_id = convert_type(code_logs[self.sc_in_fastcode.str_column_code_id], self.dc_in_fastcode.dict_column_types[self.sc_in_fastcode.str_column_code_id])
         # id is required to map startpoints and respective endpoint.
         id = self.autostack.push()
+        self.id = id
         self.dict_fastcode[id] = {}
         self.dict_fastcode[id][self.sc_in_fastcode.str_column_code_id] = code_id
         # calculating start point time
@@ -139,6 +158,7 @@ class InsightPointsWrapper(object):
     def log_stoppoint(self):
         # popping value of stack to set id
         id = self.autostack.pop()
+        self.id = id
         # calculating stop point time
         self.dict_fastcode[id][self.sc_in_fastcode.str_column_stop] = datetime.now(self.project_timezone_pytz)
         self.dict_fastcode[id][self.sc_in_fastcode.str_column_time_taken] = self.dict_fastcode[id][self.sc_in_fastcode.str_column_stop] - self.dict_fastcode[id][self.sc_in_fastcode.str_column_start]

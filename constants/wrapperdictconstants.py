@@ -34,7 +34,7 @@ class DictConstants(object):
             self.sc_in_dc.str_column_code_cost : float()
         }
 
-        self.dict_endpoint_ids = {
+        self.dict_init_ids = {
             "{}{}".format(self.sc_in_dc.str_insights_on_code_prepend, self.sc_in_dc.str_column_customer_id) : str,
             "{}{}".format(self.sc_in_dc.str_insights_on_code_prepend, self.sc_in_dc.str_column_project_id) : str,
             "{}{}".format(self.sc_in_dc.str_insights_on_code_prepend, self.sc_in_dc.str_column_node_id) : str,
