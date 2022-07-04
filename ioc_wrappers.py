@@ -199,9 +199,9 @@ class InsightPointsWrapper(object):
         
         # check if csv already exists to know whether or not to include header info
         if os.path.isfile(csv_filename):     
-            self.df_fastcode.to_csv(csv_filename, mode = mode, header = False)
+            self.df_fastcode.sort_index(axis=1).to_csv(csv_filename, mode = mode, header = False)
         else:
-            self.df_fastcode.to_csv(csv_filename, mode = mode)
+            self.df_fastcode.sort_index(axis=1).to_csv(csv_filename, mode = mode)
 
     def log_send(self):
         try: 
