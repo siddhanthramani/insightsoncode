@@ -21,6 +21,9 @@ We log 6 different information to gain insights (CPE-NBC Framework).
 Note : Code tracking involves tracking execution time and cost (if cost information is available). This can be used to optimize time-cost efficiency of your product.
 
 <br>
-[How will logging with our framework help your business](https://www.insightsoncode.com/) 
+
+[How will logging with our framework help your business](https://www.insightsoncode.com/home) 
+
 [Python Library]()
-[Python Documentation for developers](https://www.insightsoncode.com/)
+
+[Python Documentation for developers](https://www.insightsoncode.com/documentation/the-basics)
