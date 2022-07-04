@@ -22,8 +22,8 @@ Note : Code tracking involves tracking execution time and cost (if cost informat
 
 <br>
 
-[How will logging with our framework help your business](https://www.insightsoncode.com/home) 
+[For Business Leaders - How will logging with our framework help your business?](https://www.insightsoncode.com/home) 
 
-[Python Library]()
+[Our Python Library](https://pypi.org/project/InsightsOnCode/0.1.1.6/)
 
-[Python Documentation for developers](https://www.insightsoncode.com/documentation/the-basics)
+[For Developers - Python Documentation](https://www.insightsoncode.com/documentation/the-basics)
